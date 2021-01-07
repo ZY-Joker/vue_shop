@@ -1,12 +1,18 @@
 <template>
   <div>
-    进入页面
+    <el-button type="info" @click="LoginOut">退出</el-button>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Home'
+  name: 'Home',
+  methods: {
+    LoginOut () {
+      window.sessionStorage.clear()
+      this.$router.push('/login')
+    }
+  }
 }
 </script>
 
