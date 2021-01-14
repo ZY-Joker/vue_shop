@@ -9,6 +9,11 @@ Vue.config.productionTip = false
 // 配置请求的路径
 axios.defaults.baseURL = 'http://www.ysqorz.top:8888/api/private/v1/'
 Vue.prototype.$http = axios
+// axios 请求拦截器添加token 保证拥有获取数据的权限
+axios.interceptors.request.use(config => {
+  config.headers.Authorization = window.sessionStorage.getItem('token')
+  return config
+})
 new Vue({
   router,
   render: h => h(App)
