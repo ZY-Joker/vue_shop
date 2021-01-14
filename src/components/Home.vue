@@ -9,30 +9,36 @@
       </el-header>
       <!--页面主体区-->
       <el-container>
-        <el-aside width="200px">
+        <el-aside :width="isTrue ? '64px' : '200px'" >
+          <div class="toggle-button" @click="toggle">
+            |||
+          </div>
           <el-menu
-            default-active="1"
-            class="el-menu-vertical-demo"
-            @open="handleOpen"
-            @close="handleClose"
             background-color="#333744"
             text-color="#fff"
-            active-text-color="#ffd04b">
-            <el-submenu index="1">
+            active-text-color="#ffd04b"
+            :unique-opened="true"
+            :collapse="isTrue"
+            :collapse-transition="false"
+            :router="true"
+           >
+            <el-submenu :index="item.id + ''" v-for="item in menulist" :key="item.id" >
               <template slot="title">
-                <i class="el-icon-location"></i>
-                <span>人员管理</span>
+                <i :class="icons[item.id]" ></i>
+                <span style="margin-left: 10px;">{{item.authName}}</span>
               </template>
-              <el-menu-item index="1-1">
+              <el-menu-item :index="'/'+subItem.path" v-for="subItem in item.children" :key="subItem.id" >
                 <template slot="title">
-                  <i class="el-icon-location"></i>
-                  <span>人员管理</span>
+                  <i class="el-icon-menu"></i>
+                  <span>{{subItem.authName}}</span>
                 </template>
               </el-menu-item>
             </el-submenu>
           </el-menu>
         </el-aside>
-        <el-main></el-main>
+        <el-main>
+          <router-view></router-view>
+        </el-main>
       </el-container>
     </el-container>
 </template>
@@ -40,16 +46,40 @@
 <script>
 export default {
   name: 'Home',
+  data () {
+    return {
+      // 左侧菜单数据
+      menulist: [],
+      icons: {
+        125: 'iconfont el-icon-s-custom',
+        103: 'iconfont el-icon-menu',
+        101: 'iconfont el-icon-coin',
+        102: 'iconfont el-icon-document-copy',
+        145: 'iconfont el-icon-s-data'
+      },
+      isTrue: false
+    }
+  },
+  created () {
+    this.getMenuList()
+  },
   methods: {
     LoginOut () {
       window.sessionStorage.clear()
       this.$router.push('/login')
     },
-    handleOpen (key, keyPath) {
-      console.log(key, keyPath)
+    // 获取所有的菜单
+    async getMenuList () {
+      const { data: res } = await this.$http.get('menus')
+      if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
+      else {
+        this.menulist = res.data
+        return this.$message.success(res.meta.msg)
+      }
     },
-    handleClose (key, keyPath) {
-      console.log(key, keyPath)
+    // 点击按钮，切换菜单的折叠展开
+    toggle () {
+      this.isTrue = !this.isTrue
     }
   }
 }
@@ -79,8 +109,20 @@ export default {
 }
 .el-aside {
   background-color: #333744;
+  .el-menu {
+    border-right: 0;
+  }
 }
 .el-main{
   background-color: #eaedf1;
+}
+.toggle-button {
+  background-color: #4A5064;
+  font-size:10px;
+  line-height: 24px;
+  color:#fff;
+  text-align: center;
+  letter-spacing: 0.2em;
+  cursor: pointer;
 }
 </style>
