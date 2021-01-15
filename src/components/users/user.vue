@@ -12,12 +12,12 @@
       <div style="margin-top: 15px;">
         <el-row :gutter="20">
           <el-col :span="6">
-            <el-input placeholder="请输入内容">
-              <el-button slot="append" icon="el-icon-search"></el-button>
+            <el-input v-model="queryInfo.query" placeholder="请输入内容" clearable @clear="getUserList">
+              <el-button slot="append" icon="el-icon-search" @click="getUserList"></el-button>
             </el-input>
           </el-col>
           <el-col :span="4">
-            <el-button type="primary">搜索</el-button>
+            <el-button type="primary">添加用户</el-button>
           </el-col>
         </el-row>
       </div>
@@ -52,7 +52,7 @@
           label="状态">
           // 定义作用域插槽
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.mg_state"></el-switch>
+            <el-switch v-model="scope.row.mg_state" @change="userStateChange(scope.row)"></el-switch>
           </template>
         </el-table-column>
         <el-table-column
@@ -72,6 +72,7 @@
       </el-table>
 <!--分页区-->
       <el-pagination
+        style="margin-top:10px;"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="queryInfo.pagenum"
@@ -113,6 +114,13 @@ export default {
     handleCurrentChange (newpage) {
       this.queryInfo.pagenum = newpage
       this.getUserList()
+    },
+    async userStateChange (userInfo) {
+      const { data: res } = await this.$http.put(`users/${userInfo.id}/state/${userInfo.mg_state}`)
+      if (res.meta.status !== 200) {
+        userInfo.mg_state = !userInfo.mg_state
+        return this.$message.error(res.meta.msg)
+      } else return this.$message.success(res.meta.msg)
     },
     async getUserList () {
       const { data: res } = await this.$http.get('users', { params: this.queryInfo })
