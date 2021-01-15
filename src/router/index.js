@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Login from '../components/Login.vue'
 import Home from '../components/Home'
 import Welcome from '../components/Welcome'
+import User from '../components/users/user'
 Vue.use(VueRouter)
 // 路由规则
 const routes = [
@@ -14,7 +15,8 @@ const routes = [
     component: Home,
     redirect: '/welcome',
     children: [
-      { path: '/welcome', component: Welcome }
+      { path: '/welcome', component: Welcome },
+      { path: '/users', component: User }
     ]
   }
 ]

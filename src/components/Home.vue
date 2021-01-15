@@ -21,13 +21,14 @@
             :collapse="isTrue"
             :collapse-transition="false"
             :router="true"
+            :default-active="activePath"
            >
             <el-submenu :index="item.id + ''" v-for="item in menulist" :key="item.id" >
               <template slot="title">
                 <i :class="icons[item.id]" ></i>
                 <span style="margin-left: 10px;">{{item.authName}}</span>
               </template>
-              <el-menu-item :index="'/'+subItem.path" v-for="subItem in item.children" :key="subItem.id" >
+              <el-menu-item :index="'/'+subItem.path" v-for="subItem in item.children" :key="subItem.id" @click="saveNavState('/'+subItem.path)">
                 <template slot="title">
                   <i class="el-icon-menu"></i>
                   <span>{{subItem.authName}}</span>
@@ -57,16 +58,23 @@ export default {
         102: 'iconfont el-icon-document-copy',
         145: 'iconfont el-icon-s-data'
       },
-      isTrue: false
+      isTrue: false,
+      // 被激活的链接地址
+      activePath: '/users'
     }
   },
   created () {
     this.getMenuList()
+    this.activePath = window.sessionStorage.getItem('activePath')
   },
   methods: {
     LoginOut () {
       window.sessionStorage.clear()
       this.$router.push('/login')
+    },
+    saveNavState (path) {
+      window.sessionStorage.setItem('activePath', path)
+      this.activePath = path
     },
     // 获取所有的菜单
     async getMenuList () {
