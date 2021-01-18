@@ -177,9 +177,7 @@ export default {
     addCat () {
       this.$refs.addCateFormRef.validate(async valid => {
         if (!valid) return
-        console.log(this.addCateForm)
         const { data: res } = await this.$http.post('categories', this.addCateForm)
-        console.log(res)
         if (res.meta.status !== 201) return this.$message.error('添加分类数据失败')
         this.$message.success('添加分类数据成功')
         this.getGoodsList()
