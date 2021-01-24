@@ -16,7 +16,7 @@
             </el-input>
           </el-col>
           <el-col :span="4">
-            <el-button type="primary"  @click="dialogVisible = true">添加商品</el-button>
+            <el-button type="primary"  @click="goAddPage">添加商品</el-button>
           </el-col>
         </el-row>
       </div>
@@ -142,7 +142,9 @@ export default {
         })
       })
     },
-    addGood (id) {}
+    goAddPage () {
+      this.$router.push('/goods/add')
+    }
   }
 }
 </script>

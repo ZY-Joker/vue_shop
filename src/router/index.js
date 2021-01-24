@@ -9,6 +9,7 @@ import Roles from '../components/power/Roles'
 import Cate from '../components/goods/Cate'
 import params from '../components/goods/params'
 import goods from '../components/goods/goods'
+import Add from '../components/goods/Add'
 Vue.use(VueRouter)
 // 路由规则
 const routes = [
@@ -26,7 +27,8 @@ const routes = [
       { path: '/roles', component: Roles },
       { path: '/categories', component: Cate },
       { path: '/params', component: params },
-      { path: '/goods', component: goods }
+      { path: '/goods', component: goods },
+      { path: '/goods/add', component: Add }
     ]
   }
 ]

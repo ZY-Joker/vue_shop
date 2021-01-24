@@ -1,5 +1,9 @@
 import Vue from 'vue'
 import App from './App.vue'
+import VueQuillEditor from 'vue-quill-editor'
+import 'quill/dist/quill.core.css' // import styles
+import 'quill/dist/quill.snow.css' // for snow theme
+import 'quill/dist/quill.bubble.css' // for bubble theme
 import router from './router/index'
 import './plugins/element.js'
 import './assets/css/global.css'
@@ -28,6 +32,8 @@ Vue.filter('dateFormat', function (o) {
   return `${y}-${m}-${d} ${hh}:${mm}:${ss}`
 })
 Vue.component('tree-table', TreeTable)
+// 将富文本编辑器注册为全局可用的组件
+Vue.use(VueQuillEditor)
 new Vue({
   router,
   render: h => h(App)
